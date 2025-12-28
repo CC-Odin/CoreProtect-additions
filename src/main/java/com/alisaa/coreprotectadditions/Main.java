@@ -22,5 +22,6 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new LeashLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new BedLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new TntLogger(api), this);
+        Bukkit.getPluginManager().registerEvents(new EntityLogger(api), this);
     }
 }
