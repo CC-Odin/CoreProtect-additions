@@ -11,11 +11,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import io.papermc.paper.block.bed.*;
 
-
 public class BedLogger implements Listener {
     private CoreProtectAPI api;
 
-    public BedLogger(CoreProtectAPI api){
+    public BedLogger(CoreProtectAPI api) {
         this.api = api;
     }
 
@@ -25,10 +24,10 @@ public class BedLogger implements Listener {
         BedEnterAction enterAction = e.enterAction();
 
         // log spawn set or explosion trigger
-        if (enterAction.canSetSpawn().success() || enterAction.problem() == BedEnterProblem.EXPLOSION){
+        if (enterAction.canSetSpawn().success() || enterAction.problem() == BedEnterProblem.EXPLOSION) {
             api.logInteraction(e.getPlayer().getName(), e.getBed().getLocation());
         }
-    }   
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractRespawnAnchor(PlayerInteractEvent e) {
@@ -37,8 +36,9 @@ public class BedLogger implements Listener {
         }
 
         // nothing happens when clicking the respawn anchor if unloaded
-        if (e.getClickedBlock().getBlockData() instanceof RespawnAnchor respawnAnchor && respawnAnchor.getCharges() > 0){
+        if (e.getClickedBlock().getBlockData() instanceof RespawnAnchor respawnAnchor
+                && respawnAnchor.getCharges() > 0) {
             api.logInteraction(e.getPlayer().getName(), e.getClickedBlock().getLocation());
         }
-    }  
+    }
 }

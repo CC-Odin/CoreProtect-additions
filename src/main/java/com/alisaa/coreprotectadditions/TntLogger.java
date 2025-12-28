@@ -23,8 +23,8 @@ public class TntLogger implements Listener {
         this.api = api;
     }
 
-    private boolean logIfPlayer (Object entity, Location location){
-        if (entity instanceof Player player){
+    private boolean logIfPlayer(Object entity, Location location) {
+        if (entity instanceof Player player) {
             api.logInteraction(player.getName(), location);
             return true;
         }
@@ -68,7 +68,7 @@ public class TntLogger implements Listener {
                     Material material = e.getPrimingBlock().getType();
                     // most block explosions are just logged as air, since the block
                     // is broken by the explosion, but i'll leave this
-                    if (!material.isAir()){
+                    if (!material.isAir()) {
                         api.logInteraction("#" + material.name().toLowerCase(), location);
                     } else {
                         api.logInteraction("#block", location);
@@ -83,20 +83,20 @@ public class TntLogger implements Listener {
                     if (igniterEntity == null) {
                         return;
                     }
-                    if (logIfPlayer(igniterEntity, location)){
+                    if (logIfPlayer(igniterEntity, location)) {
                         return;
                     }
                     api.logInteraction("#" + igniterEntity.getName().toLowerCase(), location);
                     return;
                 }
                 // find last damage if from ender crystal
-                if (entity instanceof EnderCrystal enderCrystal){
+                if (entity instanceof EnderCrystal enderCrystal) {
                     EntityDamageEvent damageEvent = enderCrystal.getLastDamageCause();
                     Entity damager = damageEvent.getDamageSource().getCausingEntity();
-                    if (damager == null){
+                    if (damager == null) {
                         return;
                     }
-                    if (logIfPlayer(damager, location)){
+                    if (logIfPlayer(damager, location)) {
                         return;
                     }
                     api.logInteraction("#" + damager.getName().toLowerCase(), location);

@@ -23,32 +23,34 @@ public class CreeperLogger implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onExplosionPrime(ExplosionPrimeEvent e) {
         Entity entity = e.getEntity();
-        if (entity instanceof Creeper creeper){
-            if (creeper.getIgniter() instanceof Player igniter){
+        if (entity instanceof Creeper creeper) {
+            if (creeper.getIgniter() instanceof Player igniter) {
                 api.logRemoval(igniter.getName(), creeper.getLocation(), Material.CREEPER_SPAWN_EGG, null);
                 return;
             }
             LivingEntity target = creeper.getTarget();
-            if (target instanceof Player player){
+            if (target instanceof Player player) {
                 api.logRemoval(player.getName(), creeper.getLocation(), Material.CREEPER_SPAWN_EGG, null);
                 return;
             }
-            if (target != null){
-                api.logRemoval("#"+ target.getName().toLowerCase(), creeper.getLocation(), Material.CREEPER_SPAWN_EGG, null);
+            if (target != null) {
+                api.logRemoval("#" + target.getName().toLowerCase(), creeper.getLocation(), Material.CREEPER_SPAWN_EGG,
+                        null);
             }
         }
-        if (entity instanceof LargeFireball fireball){
+        if (entity instanceof LargeFireball fireball) {
             ProjectileSource shooter = fireball.getShooter();
-            if (shooter instanceof Mob mob){
+            if (shooter instanceof Mob mob) {
                 LivingEntity target = mob.getTarget();
-                if (target instanceof Player player){
+                if (target instanceof Player player) {
                     api.logRemoval(player.getName(), fireball.getLocation(), Material.FIRE_CHARGE, null);
                     return;
                 }
-                if (target != null){
-                    api.logRemoval("#"+target.getName().toLowerCase(), fireball.getLocation(), Material.FIRE_CHARGE, null);
+                if (target != null) {
+                    api.logRemoval("#" + target.getName().toLowerCase(), fireball.getLocation(), Material.FIRE_CHARGE,
+                            null);
                 }
-                
+
             }
         }
     }
