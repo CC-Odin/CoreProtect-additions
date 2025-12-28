@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent.BedEnterResult;
 
 import io.papermc.paper.block.bed.*;
 
@@ -19,7 +20,7 @@ public class BedLogger implements Listener {
     }
 
     // explosions and set spawn without sleeping count as cancelled event
-    @EventHandler(ignoreCancelled = false)
+    /*@EventHandler(ignoreCancelled = false)
     public void onBedInteract(PlayerBedEnterEvent e) {
         BedEnterAction enterAction = e.enterAction();
 
@@ -27,7 +28,22 @@ public class BedLogger implements Listener {
         if (enterAction.canSetSpawn().success() || enterAction.problem() == BedEnterProblem.EXPLOSION) {
             api.logInteraction(e.getPlayer().getName(), e.getBed().getLocation());
         }
+    }*/
+
+    // legacy version until 1.21.11 releases publically
+    @EventHandler(ignoreCancelled = false)
+    public void onBedInteract(PlayerBedEnterEvent e) {
+        BedEnterResult enterAction = e.getBedEnterResult();
+
+        // log spawn set or explosion trigger
+        if (enterAction != BedEnterResult.NOT_POSSIBLE_HERE  &&
+            enterAction != BedEnterResult.OBSTRUCTED &&
+            enterAction != BedEnterResult.OTHER_PROBLEM &&
+            enterAction != BedEnterResult.TOO_FAR_AWAY) {
+            api.logInteraction(e.getPlayer().getName(), e.getBed().getLocation());
+        }
     }
+
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractRespawnAnchor(PlayerInteractEvent e) {
