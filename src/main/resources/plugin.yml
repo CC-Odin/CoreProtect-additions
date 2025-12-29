@@ -3,6 +3,6 @@ main: com.alisaa.coreprotectadditions.Main
 version: ${version}
 api-version: 1.21
 author: itsAlisaa
-decription: Provides logs for extra things, that CoreProtect hasn't implemented yet...
+description: Provides logs for extra things, that CoreProtect hasn't implemented yet...
 depend:
   - CoreProtect
