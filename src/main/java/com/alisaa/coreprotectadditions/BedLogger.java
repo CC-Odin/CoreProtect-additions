@@ -20,30 +20,21 @@ public class BedLogger implements Listener {
     }
 
     // explosions and set spawn without sleeping count as cancelled event
-    /*@EventHandler(ignoreCancelled = false)
-    public void onBedInteract(PlayerBedEnterEvent e) {
-        BedEnterAction enterAction = e.enterAction();
-
-        // log spawn set or explosion trigger
-        if (enterAction.canSetSpawn().success() || enterAction.problem() == BedEnterProblem.EXPLOSION) {
-            api.logInteraction(e.getPlayer().getName(), e.getBed().getLocation());
-        }
-    }*/
-
-    // legacy version until 1.21.11 releases publically
     @EventHandler(ignoreCancelled = false)
     public void onBedInteract(PlayerBedEnterEvent e) {
-        BedEnterResult enterAction = e.getBedEnterResult();
+        try {
+            BedEnterAction enterAction = e.enterAction();
 
-        // log spawn set or explosion trigger
-        if (enterAction != BedEnterResult.NOT_POSSIBLE_HERE  &&
-            enterAction != BedEnterResult.OBSTRUCTED &&
-            enterAction != BedEnterResult.OTHER_PROBLEM &&
-            enterAction != BedEnterResult.TOO_FAR_AWAY) {
+            // log spawn set or explosion trigger
+            if (enterAction.canSetSpawn().success() || enterAction.problem() == BedEnterProblem.EXPLOSION) {
+                api.logInteraction(e.getPlayer().getName(), e.getBed().getLocation());
+            }
+        // for versione before 1.21.11, BedEnterAction does not exist
+        } catch (NoSuchMethodError error){
             api.logInteraction(e.getPlayer().getName(), e.getBed().getLocation());
         }
-    }
 
+    }
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerInteractRespawnAnchor(PlayerInteractEvent e) {

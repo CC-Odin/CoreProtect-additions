@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -54,10 +55,6 @@ public class TntLogger implements Listener {
                         return;
                     }
 
-                    if (shooter instanceof Entity shooterEntity) {
-                        api.logInteraction("#" + shooterEntity.getName().toLowerCase(), location);
-                        return;
-                    }
                     // fallback, in case no shooter exists, simply log the projectile
                     api.logInteraction("#" + entity.getName().toLowerCase(), location);
                 }

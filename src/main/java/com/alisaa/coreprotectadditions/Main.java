@@ -19,6 +19,7 @@ public class Main extends JavaPlugin {
         CoreProtectAPI api = ((CoreProtect) depend).getAPI();
 
         Bukkit.getPluginManager().registerEvents(new CreeperLogger(api), this);
+        Bukkit.getPluginManager().registerEvents(new MiscLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new LeashLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new BedLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new TntLogger(api), this);
