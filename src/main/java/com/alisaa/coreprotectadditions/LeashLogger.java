@@ -51,7 +51,8 @@ public class LeashLogger implements Listener {
         }
 
         // if all else fails log as entity breaking own leash
-        api.logRemoval("#" + entity.getName().toLowerCase(), entity.getLocation(), Material.LEAD, null);
+        api.logRemoval("#" + entity.getName().toLowerCase().replace(" ", "_"), entity.getLocation(), Material.LEAD,
+                null);
     }
 
     @EventHandler(ignoreCancelled = true)
@@ -68,7 +69,7 @@ public class LeashLogger implements Listener {
                 api.logRemoval(remover.getName(), pos, Material.LEAD, null);
                 return;
             }
-            api.logRemoval("#" + remover.getName().toLowerCase(), pos, Material.LEAD, null);
+            api.logRemoval("#" + remover.getName().toLowerCase().replace(" ", "_"), pos, Material.LEAD, null);
             return;
         }
 
@@ -77,6 +78,13 @@ public class LeashLogger implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerLeashEntityEvent(PlayerLeashEntityEvent e) {
-        api.logPlacement(e.getPlayer().getName(), e.getEntity().getLocation(), Material.LEAD, null);
+        Leashable entity = (Leashable) e.getEntity();
+        // log the breaking of the old leash if possible
+        if (entity.isLeashed()){
+            api.logRemoval(e.getPlayer().getName(), entity.getLeashHolder().getLocation(), Material.LEAD, null);
+        }
+
+        // log putting a leash on the entity
+        api.logPlacement(e.getPlayer().getName(), entity.getLocation(), Material.LEAD, null);
     }
 }
