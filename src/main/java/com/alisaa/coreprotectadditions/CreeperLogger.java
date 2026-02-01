@@ -4,10 +4,10 @@ import net.coreprotect.CoreProtectAPI;
 import org.bukkit.Material;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LargeFireball;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SizedFireball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
@@ -34,11 +34,11 @@ public class CreeperLogger implements Listener {
                 return;
             }
             if (target != null) {
-                api.logRemoval("#" + target.getName().toLowerCase(), creeper.getLocation(), Material.CREEPER_SPAWN_EGG,
+                api.logRemoval("#" + target.getName().toLowerCase().replace(" ", "_"), creeper.getLocation(), Material.CREEPER_SPAWN_EGG,
                         null);
             }
         }
-        if (entity instanceof LargeFireball fireball) {
+        if (entity instanceof SizedFireball fireball) {
             ProjectileSource shooter = fireball.getShooter();
             if (shooter instanceof Mob mob) {
                 LivingEntity target = mob.getTarget();
@@ -47,7 +47,7 @@ public class CreeperLogger implements Listener {
                     return;
                 }
                 if (target != null) {
-                    api.logRemoval("#" + target.getName().toLowerCase(), fireball.getLocation(), Material.FIRE_CHARGE,
+                    api.logRemoval("#" + target.getName().toLowerCase().replace(" ", "_"), fireball.getLocation(), Material.FIRE_CHARGE,
                             null);
                 }
 
