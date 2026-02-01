@@ -11,6 +11,7 @@ import org.bukkit.entity.SizedFireball;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.projectiles.ProjectileSource;
 
 public class CreeperLogger implements Listener {
@@ -34,11 +35,15 @@ public class CreeperLogger implements Listener {
                 return;
             }
             if (target != null) {
-                api.logRemoval("#" + target.getName().toLowerCase().replace(" ", "_"), creeper.getLocation(), Material.CREEPER_SPAWN_EGG,
-                        null);
+                api.logRemoval("#" + target.getName().toLowerCase().replace(" ", "_"), creeper.getLocation(),
+                        Material.CREEPER_SPAWN_EGG, null);
             }
         }
-        if (entity instanceof SizedFireball fireball) {
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onFireballHit(ProjectileHitEvent e) {
+        if (e.getEntity() instanceof SizedFireball fireball) {
             ProjectileSource shooter = fireball.getShooter();
             if (shooter instanceof Mob mob) {
                 LivingEntity target = mob.getTarget();
@@ -47,12 +52,14 @@ public class CreeperLogger implements Listener {
                     return;
                 }
                 if (target != null) {
-                    api.logRemoval("#" + target.getName().toLowerCase().replace(" ", "_"), fireball.getLocation(), Material.FIRE_CHARGE,
-                            null);
+                    api.logRemoval("#" + target.getName().toLowerCase().replace(" ", "_"), fireball.getLocation(),
+                            Material.FIRE_CHARGE, null);
                 }
 
+            } else {
+                api.logRemoval("#fireball", fireball.getLocation(), Material.FIRE_CHARGE, null);
             }
         }
-    }
 
+    }
 }
