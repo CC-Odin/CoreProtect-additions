@@ -59,8 +59,14 @@ public class VehicleLogger implements Listener {
         if (attacker instanceof Player player) {
             api.logRemoval(player.getName(), entity.getLocation(), item, null);
             return;
+        } 
+        
+        if (attacker != null){
+            api.logRemoval("#" + attacker.getName().toLowerCase().replace(" ", "_"), entity.getLocation(), item, null);
+            return;
         }
-        api.logRemoval("#" + entity.getName().toLowerCase(), entity.getLocation(), item, null);
+
+        api.logRemoval("#" + entity.getName().toLowerCase().replace(" ", "_"), entity.getLocation(), item, null);
     }
 
 }

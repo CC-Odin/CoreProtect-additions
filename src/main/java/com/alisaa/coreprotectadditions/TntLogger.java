@@ -56,7 +56,7 @@ public class TntLogger implements Listener {
                     }
 
                     // fallback, in case no shooter exists, simply log the projectile
-                    api.logInteraction("#" + entity.getName().toLowerCase(), location);
+                    api.logInteraction("#" + entity.getName().toLowerCase().replace(" ", "_"), location);
                 }
                 return;
 
@@ -66,7 +66,7 @@ public class TntLogger implements Listener {
                     // most block explosions are just logged as air, since the block
                     // is broken by the explosion, but i'll leave this
                     if (!material.isAir()) {
-                        api.logInteraction("#" + material.name().toLowerCase(), location);
+                        api.logInteraction("#" + material.name().toLowerCase().replace(" ", "_"), location);
                     } else {
                         api.logInteraction("#block", location);
                     }
@@ -83,7 +83,7 @@ public class TntLogger implements Listener {
                     if (logIfPlayer(igniterEntity, location)) {
                         return;
                     }
-                    api.logInteraction("#" + igniterEntity.getName().toLowerCase(), location);
+                    api.logInteraction("#" + igniterEntity.getName().toLowerCase().replace(" ", "_"), location);
                     return;
                 }
                 // find last damage if from ender crystal
@@ -96,11 +96,11 @@ public class TntLogger implements Listener {
                     if (logIfPlayer(damager, location)) {
                         return;
                     }
-                    api.logInteraction("#" + damager.getName().toLowerCase(), location);
+                    api.logInteraction("#" + damager.getName().toLowerCase().replace(" ", "_"), location);
                     return;
                 }
                 // Otherisw simply log the entity name
-                api.logInteraction("#" + entity.getName().toLowerCase(), location);
+                api.logInteraction("#" + entity.getName().toLowerCase().replace(" ", "_"), location);
                 return;
             default:
                 break;
