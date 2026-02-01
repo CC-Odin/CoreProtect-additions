@@ -29,7 +29,7 @@ public class BedLogger implements Listener {
             if (enterAction.canSetSpawn().success() || enterAction.problem() == BedEnterProblem.EXPLOSION) {
                 api.logInteraction(e.getPlayer().getName(), e.getBed().getLocation());
             }
-        // for versione before 1.21.11, BedEnterAction does not exist
+        // for versions before 1.21.11, BedEnterAction does not exist
         } catch (NoSuchMethodError error){
             api.logInteraction(e.getPlayer().getName(), e.getBed().getLocation());
         }

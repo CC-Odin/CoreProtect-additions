@@ -12,14 +12,14 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
         Plugin depend = Bukkit.getPluginManager().getPlugin("CoreProtect");
         if (depend == null) {
-            getLogger().warning("CoreProtect was not found, disabling plugin");
+            getLogger().severe("CoreProtect was not found, disabling plugin");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
         CoreProtectAPI api = ((CoreProtect) depend).getAPI();
 
-        Bukkit.getPluginManager().registerEvents(new CreeperLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new MiscLogger(api), this);
+        Bukkit.getPluginManager().registerEvents(new CreeperLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new LeashLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new BedLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new TntLogger(api), this);
