@@ -1,4 +1,4 @@
-package com.alisaa.coreprotectadditions;
+package com.alisaa.coreprotectadditions.eventhandlers;
 
 import net.coreprotect.CoreProtectAPI;
 
@@ -14,8 +14,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityMountEvent;
 import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
+
+import com.destroystokyo.paper.MaterialTags;
 
 public class VehicleLogger implements Listener {
     private CoreProtectAPI api;
@@ -25,7 +28,7 @@ public class VehicleLogger implements Listener {
         this.api = api;
     }
 
-    private boolean validEntity(Entity entity) {
+    private boolean shouldLogPlacement(Entity entity) {
         for (Class<?> class1 : allowedEntities) {
             if (class1.isInstance(entity)) {
                 return true;
@@ -37,7 +40,7 @@ public class VehicleLogger implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlacement(EntityPlaceEvent e) {
         Player player = e.getPlayer();
-        if (player == null || !validEntity(e.getEntity())) {
+        if (player == null || !shouldLogPlacement(e.getEntity())) {
             return;
         }
 
@@ -50,7 +53,7 @@ public class VehicleLogger implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onRemoval(VehicleDestroyEvent e) {
         Vehicle entity = e.getVehicle();
-        if (!validEntity(entity)) {
+        if (!shouldLogPlacement(entity)) {
             return;
         }
         Entity attacker = e.getAttacker();
@@ -67,6 +70,19 @@ public class VehicleLogger implements Listener {
         }
 
         api.logRemoval("#" + entity.getName().toLowerCase().replace(" ", "_"), entity.getLocation(), item, null);
+    }
+
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityMount (EntityMountEvent e){
+        Entity entity = e.getEntity();
+
+        if (!(entity instanceof Player)){
+            return;
+        }
+        
+        Material type = e.getMount().getPickItemStack().getType();
+        MaterialTags.SPAWN_EGGS.contains(type.name());
+
     }
 
 }

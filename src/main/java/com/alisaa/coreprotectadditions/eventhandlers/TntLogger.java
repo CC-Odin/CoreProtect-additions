@@ -1,4 +1,4 @@
-package com.alisaa.coreprotectadditions;
+package com.alisaa.coreprotectadditions.eventhandlers;
 
 import net.coreprotect.CoreProtectAPI;
 
@@ -6,7 +6,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Mob;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;

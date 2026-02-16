@@ -1,4 +1,4 @@
-package com.alisaa.coreprotectadditions;
+package com.alisaa.coreprotectadditions.eventhandlers;
 
 import net.coreprotect.CoreProtectAPI;
 import org.bukkit.Material;

@@ -1,4 +1,4 @@
-package com.alisaa.coreprotectadditions;
+package com.alisaa.coreprotectadditions.eventhandlers;
 
 import net.coreprotect.CoreProtectAPI;
 
@@ -42,8 +42,7 @@ public class BedLogger implements Listener {
         }
 
         // nothing happens when clicking the respawn anchor if unloaded
-        if (e.getClickedBlock().getBlockData() instanceof RespawnAnchor respawnAnchor
-                && respawnAnchor.getCharges() > 0) {
+        if (e.getClickedBlock().getBlockData() instanceof RespawnAnchor respawnAnchor && respawnAnchor.getCharges() > 0) {
             api.logInteraction(e.getPlayer().getName(), e.getClickedBlock().getLocation());
         }
     }
