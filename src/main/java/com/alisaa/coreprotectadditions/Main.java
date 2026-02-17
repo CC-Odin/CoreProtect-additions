@@ -5,6 +5,7 @@ import net.coreprotect.CoreProtectAPI;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.alisaa.coreprotectadditions.eventhandlers.*;
@@ -12,24 +13,25 @@ import com.alisaa.coreprotectadditions.eventhandlers.*;
 public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
-        saveDefaultConfig();
-        Plugin depend = Bukkit.getPluginManager().getPlugin("CoreProtect");
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        Plugin depend = pluginManager.getPlugin("CoreProtect");
         if (depend == null) {
             getLogger().severe("CoreProtect was not found, disabling plugin");
-            getServer().getPluginManager().disablePlugin(this);
+            pluginManager.disablePlugin(this);
             return;
         }
         CoreProtectAPI api = ((CoreProtect) depend).getAPI();        
 
         ConfigHandler.initConfig(this);
 
+
         if (ConfigHandler.LOG_LEASHES){
-            Bukkit.getPluginManager().registerEvents(new LeashLogger(api), this);
+            pluginManager.registerEvents(new LeashLogger(api), this);
         }
-        Bukkit.getPluginManager().registerEvents(new MiscLogger(api), this);
-        Bukkit.getPluginManager().registerEvents(new CreeperLogger(api), this);
-        Bukkit.getPluginManager().registerEvents(new BedLogger(api), this);
-        Bukkit.getPluginManager().registerEvents(new TntLogger(api), this);
-        Bukkit.getPluginManager().registerEvents(new VehicleLogger(api), this);
+        pluginManager.registerEvents(new MiscLogger(api), this);
+        pluginManager.registerEvents(new CreeperLogger(api), this);
+        pluginManager.registerEvents(new BedLogger(api), this);
+        pluginManager.registerEvents(new TntLogger(api), this);
+        pluginManager.registerEvents(new VehicleLogger(api), this);
     }
 }

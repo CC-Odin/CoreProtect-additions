@@ -47,6 +47,9 @@ public class ConfigHandler {
         configEntries.add(new ConfigEntry("log-entity-dye", true, null));
         LOG_ENTITY_DYE = configEntries.getLast().getValue();
 
+        configEntries.add(new ConfigEntry("log-entity-rename", true, null));
+        LOG_ENTITY_RENAME = configEntries.getLast().getValue();
+
         configEntries.add(new ConfigEntry("log-leashes", true, null));
         LOG_LEASHES = configEntries.getLast().getValue();
 

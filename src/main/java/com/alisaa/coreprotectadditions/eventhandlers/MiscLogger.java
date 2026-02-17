@@ -23,31 +23,31 @@ public class MiscLogger implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerNameEntityEvent(PlayerNameEntityEvent e) {
-        if (ConfigHandler.LOG_ENTITY_RENAME){
+        if (ConfigHandler.LOG_ENTITY_RENAME) {
             api.logPlacement(e.getPlayer().getName(), e.getEntity().getLocation(), Material.NAME_TAG, null);
         }
     }
 
     @EventHandler(ignoreCancelled = true)
     public void onRaidTrigger(RaidTriggerEvent e) {
-        if (ConfigHandler.LOG_RAIDS){
+        if (ConfigHandler.LOG_RAIDS) {
             api.logRemoval(e.getPlayer().getName(), e.getRaid().getLocation(), Material.OMINOUS_BOTTLE, null);
         }
     }
 
-    
     @EventHandler(ignoreCancelled = true)
-    public void onEntityDye(EntityDyeEvent e){
-        Bukkit.getLogger().severe(e.toString());
-        if (!ConfigHandler.LOG_ENTITY_DYE){
+    public void onEntityDye(EntityDyeEvent e) {
+        if (!ConfigHandler.LOG_ENTITY_DYE) {
             return;
         }
 
         Player player = e.getPlayer();
-        if (player == null){
+        if (player == null) {
             return;
         }
-        Material dye = player.getActiveItem().getType();
+
+        // TODO: figure out how to actually do this
+        Material dye = Material.getMaterial(e.getColor().name() + "_DYE");
         api.logPlacement(player.getName(), e.getEntity().getLocation(), dye, null);
     }
 

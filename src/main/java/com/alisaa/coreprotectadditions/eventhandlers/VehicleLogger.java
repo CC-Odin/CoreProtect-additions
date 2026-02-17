@@ -33,8 +33,8 @@ public class VehicleLogger implements Listener {
         if (entity instanceof ExplosiveMinecart) {
             return true;
         }
-        if (ConfigHandler.LOG_CHEST_BOAT && entity instanceof ChestBoat) {
-            return true;
+        if (!ConfigHandler.LOG_CHEST_BOAT && entity instanceof ChestBoat) {
+            return false;
         }
 
         if (ConfigHandler.LOG_BOAT && entity instanceof Boat) {
