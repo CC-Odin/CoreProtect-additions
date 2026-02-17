@@ -2,38 +2,74 @@ package com.alisaa.coreprotectadditions.eventhandlers;
 
 import net.coreprotect.CoreProtectAPI;
 
-import java.util.Arrays;
-import java.util.List;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Boat;
+import org.bukkit.entity.ChestBoat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Minecart;
+import org.bukkit.entity.Mob;
+import org.bukkit.entity.minecart.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDismountEvent;
 import org.bukkit.event.entity.EntityMountEvent;
 import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.vehicle.VehicleDestroyEvent;
+import org.bukkit.inventory.InventoryHolder;
 
-import com.destroystokyo.paper.MaterialTags;
+import com.alisaa.coreprotectadditions.ConfigHandler;
 
 public class VehicleLogger implements Listener {
     private CoreProtectAPI api;
-    private static final List<Class<?>> allowedEntities = Arrays.asList(Minecart.class, Boat.class);
 
     public VehicleLogger(CoreProtectAPI api) {
         this.api = api;
     }
 
     private boolean shouldLogPlacement(Entity entity) {
-        for (Class<?> class1 : allowedEntities) {
-            if (class1.isInstance(entity)) {
-                return true;
-            }
+        if (entity instanceof ExplosiveMinecart) {
+            return true;
         }
+        if (ConfigHandler.LOG_CHEST_BOAT && entity instanceof ChestBoat) {
+            return true;
+        }
+
+        if (ConfigHandler.LOG_BOAT && entity instanceof Boat) {
+            return true;
+        }
+
+        if (!ConfigHandler.LOG_HOPPER_MINECART && entity instanceof HopperMinecart) {
+            return false;
+        }
+
+        if (!ConfigHandler.LOG_CHEST_MINECART && entity instanceof StorageMinecart) {
+            return false;
+        }
+
+        if (ConfigHandler.LOG_MINECART && entity instanceof Minecart) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean shouldLogRiding(Entity entity) {
+        if (ConfigHandler.LOG_INVENTORY_RIDE && entity instanceof InventoryHolder) {
+            return true;
+        }
+        if (ConfigHandler.LOG_MOB_RIDE && entity instanceof Mob) {
+            return true;
+        }
+        if (ConfigHandler.LOG_MINECART_RIDE && entity instanceof Minecart) {
+            return true;
+        }
+        if (ConfigHandler.LOG_BOAT_RIDE && entity instanceof Boat) {
+            return true;
+        }
+
         return false;
     }
 
@@ -62,9 +98,9 @@ public class VehicleLogger implements Listener {
         if (attacker instanceof Player player) {
             api.logRemoval(player.getName(), entity.getLocation(), item, null);
             return;
-        } 
-        
-        if (attacker != null){
+        }
+
+        if (attacker != null) {
             api.logRemoval("#" + attacker.getName().toLowerCase().replace(" ", "_"), entity.getLocation(), item, null);
             return;
         }
@@ -73,16 +109,38 @@ public class VehicleLogger implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onEntityMount (EntityMountEvent e){
-        Entity entity = e.getEntity();
+    public void onEntityMount(EntityMountEvent e) {
+        Entity rider = e.getEntity();
 
-        if (!(entity instanceof Player)){
+        if (!(rider instanceof Player)) {
             return;
         }
-        
-        Material type = e.getMount().getPickItemStack().getType();
-        MaterialTags.SPAWN_EGGS.contains(type.name());
 
+        Entity mount = e.getMount();
+
+        if (!shouldLogRiding(mount)) {
+            return;
+        }
+
+        Material type = mount.getPickItemStack().getType();
+        api.logPlacement(rider.getName(), mount.getLocation(), type, null);
     }
 
+    @EventHandler(ignoreCancelled = true)
+    public void onEntityDismount(EntityDismountEvent e) {
+        Entity rider = e.getEntity();
+
+        if (!(rider instanceof Player)) {
+            return;
+        }
+
+        Entity mount = e.getDismounted();
+
+        if (!shouldLogRiding(mount)) {
+            return;
+        }
+
+        Material type = mount.getPickItemStack().getType();
+        api.logRemoval(rider.getName(), mount.getLocation(), type, null);
+    }
 }

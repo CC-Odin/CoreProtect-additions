@@ -10,6 +10,9 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.projectiles.ProjectileSource;
+
+import com.alisaa.coreprotectadditions.ConfigHandler;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.TNTPrimeEvent;
@@ -43,7 +46,12 @@ public class TntLogger implements Listener {
 
         PrimeCause cause = e.getCause();
         switch (cause) {
-            case REDSTONE, DISPENSER, FIRE:
+            case REDSTONE:
+                if (ConfigHandler.LOG_REDSTONE_TNT_IGNITE){
+                    api.logInteraction("#redstone", location);
+                }
+                return;
+            case DISPENSER, FIRE:
                 api.logInteraction("#" + cause.toString().toLowerCase(), location);
                 return;
 

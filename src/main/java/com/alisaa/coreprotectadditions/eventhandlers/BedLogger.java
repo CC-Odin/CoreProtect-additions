@@ -9,6 +9,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import com.alisaa.coreprotectadditions.ConfigHandler;
+
 import io.papermc.paper.block.bed.*;
 
 public class BedLogger implements Listener {
@@ -25,11 +27,15 @@ public class BedLogger implements Listener {
             BedEnterAction enterAction = e.enterAction();
 
             // log spawn set or explosion trigger
-            if (enterAction.canSetSpawn().success() || enterAction.problem() == BedEnterProblem.EXPLOSION) {
+            if (enterAction.problem() == BedEnterProblem.EXPLOSION ||
+                    (ConfigHandler.LOG_SPAWN_SET && enterAction.canSetSpawn().success())) {
                 api.logInteraction(e.getPlayer().getName(), e.getBed().getLocation());
             }
-        // for versions before 1.21.11, BedEnterAction does not exist
-        } catch (NoSuchMethodError error){
+            // for versions before 1.21.11, BedEnterAction does not exist
+        } catch (NoSuchMethodError error) {
+            if (!(ConfigHandler.LOG_SPAWN_SET && e.getBed().getWorld().isBedWorks())){
+                return;
+            }
             api.logInteraction(e.getPlayer().getName(), e.getBed().getLocation());
         }
 
@@ -42,7 +48,11 @@ public class BedLogger implements Listener {
         }
 
         // nothing happens when clicking the respawn anchor if unloaded
-        if (e.getClickedBlock().getBlockData() instanceof RespawnAnchor respawnAnchor && respawnAnchor.getCharges() > 0) {
+        if (e.getClickedBlock().getBlockData() instanceof RespawnAnchor respawnAnchor
+                && respawnAnchor.getCharges() > 0) {
+            if (!ConfigHandler.LOG_SPAWN_SET && e.getClickedBlock().getWorld().isRespawnAnchorWorks()) {
+                return;
+            }
             api.logInteraction(e.getPlayer().getName(), e.getClickedBlock().getLocation());
         }
     }

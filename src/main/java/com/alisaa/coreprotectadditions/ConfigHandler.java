@@ -1,0 +1,130 @@
+package com.alisaa.coreprotectadditions;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
+
+public class ConfigHandler {
+    public static final String HEADER = """
+            # CoreProtect-additions by itsAlisaa
+            # Configuration file, for more info on the plugin check out the readme https://github.com/guss-alberto/CoreProtect-additions
+            
+            """;
+    public static boolean LOG_SPAWN_SET;
+    public static boolean LOG_ENTITY_DYE;
+    public static boolean LOG_ENTITY_RENAME;
+    public static boolean LOG_LEASHES;
+    public static boolean LOG_RAIDS;
+    public static boolean LOG_REDSTONE_TNT_IGNITE;
+    public static boolean LOG_MINECART;
+    public static boolean LOG_CHEST_MINECART;
+    public static boolean LOG_HOPPER_MINECART;
+    public static boolean LOG_BOAT;
+    public static boolean LOG_CHEST_BOAT;
+    public static boolean LOG_MOB_RIDE;
+    public static boolean LOG_INVENTORY_RIDE;
+    public static boolean LOG_BOAT_RIDE;
+    public static boolean LOG_MINECART_RIDE;
+
+
+    static FileConfiguration config;
+
+    private ConfigHandler(){}
+    
+    static void initConfig(Plugin plugin){
+        config = plugin.getConfig();
+        final List<ConfigEntry> configEntries = new ArrayList<>();
+
+        configEntries.add(new ConfigEntry("log-spawn-set", true, "# Wether to log setting spawn on a bed or respawn anchor\n" + //
+                                                                                   "# Respawn block explosions will always be logged"));
+        LOG_SPAWN_SET = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-entity-dye", true, null));
+        LOG_ENTITY_DYE = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-leashes", true, null));
+        LOG_LEASHES = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-raids", true, null));
+        LOG_RAIDS = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-redstone-tnt-ignite", true, "# Useful for farms where TNT duping is enabled\n" + //
+                                                                                             "# Finding TNT ignited by redstone torches or levers might"));
+        LOG_REDSTONE_TNT_IGNITE = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-chest-boats", true, null));
+        LOG_CHEST_BOAT = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-boats", true, "\n#Log breaking/placing for the following vehicle entities"));
+        LOG_BOAT = configEntries.getLast().getValue();
+
+
+        configEntries.add(new ConfigEntry("log-chest-minecarts", true, null));
+        LOG_CHEST_MINECART = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-hopper-minecarts", true, "# Disabling these is useful if you have lots of  farms with 'cart yeeters'"));
+        LOG_HOPPER_MINECART = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-minecarts", true, "# This includes also furnace minecarts. TNT carts are always logged"));
+        LOG_MINECART = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-inventory-ride", true, "\n# Log riding/dismounting for rideable entities\n" + //
+                                                                                        "#Whether to log riding entities with inventories (donkeys, llamas, chest boats etc.)"));
+        LOG_INVENTORY_RIDE = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-mob-ride", true, null));
+        LOG_MOB_RIDE = configEntries.getLast().getValue();
+
+        configEntries.add(new ConfigEntry("log-minecart-ride", false, "# Riding boats and minecarts is logged the same as breaking and placing them, so it can be confusing"));
+        LOG_MINECART_RIDE = configEntries.getLast().getValue();
+        
+        configEntries.add(new ConfigEntry("log-boat-ride", false, null));
+        LOG_BOAT_RIDE = configEntries.getLast().getValue();
+
+        saveConfigFile(new File(plugin.getDataFolder(), "config.yml"), configEntries);
+    }
+
+    private static void saveConfigFile(File file, List<ConfigEntry> configEntries){
+        try (final FileOutputStream fout = new FileOutputStream(file)){
+            fout.write(HEADER.getBytes());
+            for (ConfigEntry configEntry : configEntries) {
+                fout.write(configEntry.toString().getBytes());
+            }
+        } catch (Exception e){
+            Bukkit.getLogger().severe("Failed to save config file");
+            e.printStackTrace();
+        }
+    }
+
+    private static class ConfigEntry {
+        String key;
+        String descrption;
+        boolean value;
+
+        public ConfigEntry(String key, Boolean defaultValue, String descrption){
+            this.key = key;
+            this.descrption = descrption;
+            config.addDefault(key, defaultValue);
+            this.value = config.getBoolean(key);
+        }
+
+        public boolean getValue(){
+            return value;
+        }
+
+        public String toString(){
+            String entry = this.key + ": " + this.value;
+            if (descrption != null){
+                entry = this.descrption + "\n" + entry; 
+            }
+            return entry + "\n";
+        }
+
+    }
+
+}

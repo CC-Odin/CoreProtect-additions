@@ -3,11 +3,7 @@ package com.alisaa.coreprotectadditions;
 import net.coreprotect.CoreProtect;
 import net.coreprotect.CoreProtectAPI;
 
-import java.io.File;
-import java.io.IOException;
-
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -25,7 +21,11 @@ public class Main extends JavaPlugin {
         }
         CoreProtectAPI api = ((CoreProtect) depend).getAPI();        
 
-        Bukkit.getPluginManager().registerEvents(new LeashLogger(api), this);
+        ConfigHandler.initConfig(this);
+
+        if (ConfigHandler.LOG_LEASHES){
+            Bukkit.getPluginManager().registerEvents(new LeashLogger(api), this);
+        }
         Bukkit.getPluginManager().registerEvents(new MiscLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new CreeperLogger(api), this);
         Bukkit.getPluginManager().registerEvents(new BedLogger(api), this);
